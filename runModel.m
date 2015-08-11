@@ -17,7 +17,7 @@ rcond           = [2 6]; %which condition to run
 ncond           = numel(rcond);
 rcontrast       = 1:numContrasts; %which contrast level
 ncontrasts      = numel(rcontrast);
-p.rcond=rcond;
+p.rcond         = rcond;
 
 %% Initializing time-courses
 for lay=1:p.nLayers %go through maximum possible layers. This way, if there are <5 layers, the feedback can be zero.
@@ -41,10 +41,10 @@ p.attTrace     = zeros(p.ntheta,p.nt); %Record of Attentional gain factor
 p.WTA          = zeros(p.ntheta,p.nt);
 p_pool         = cell(max(rcond));
 stim           = cell(ncond,2);
-p.wta            = zeros(ncontrasts);
-p.corrIdx        = zeros(ncontrasts);
-p.meanAmp        = zeros(ncontrasts);
-p.rivalryIdx     = zeros(ncond,1);
+p.wta          = zeros(ncontrasts);
+p.corrIdx      = zeros(ncontrasts);
+p.meanAmp      = zeros(ncontrasts);
+p.rivalryIdx   = zeros(ncond,1);
 subplotlocs    = [4 6 2 1 3]; %on a 2x3 plot
 %% loop through stimuli conditions
 for cond = rcond
