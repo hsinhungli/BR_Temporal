@@ -1,13 +1,15 @@
-aT            = .3;                     %Threshold of attention function
-aR            = 10;                    %Slope of attention function
-aM            = 1.7;
+aT            = .5;                    %Threshold of attention function
+aR            = 5;                    %Slope of attention function
+aM            = 2;
 R1R2          = (-1:.01:1);
 
 % attR1 = R1^n / (R1^n+R2^n)+sigma;
 % attR2 = R2^n / (R1^n+R2^n)+sigma;
+inpR1 = R1R2;
+inpR2 = fliplr(R1R2);
 
-attR1  = 1+ aM ./ (1 + exp(-(R1R2-aT)*aR));
-attR2  = 1+ aM ./ (1 + exp(-(fliplr(R1R2)-aT)*aR));
+attR1  = halfExp(1+ aM *(1./(1 + exp(-(inpR1-aT)*aR)) - 1./(1 + exp(-(inpR2-aT)*aR))),1);
+attR2  = halfExp(1+ aM *(1./(1 + exp(-(inpR2-aT)*aR)) - 1./(1 + exp(-(inpR1-aT)*aR))),1);
 
 figure;
 plot(R1R2,attR1); hold on
