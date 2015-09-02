@@ -14,6 +14,7 @@ Ib = halfExp(C,p.p(1));
 sigma = halfExp(p.sigma(1), p.p(1));
 
 R = E ./ (I + Ib + sigma);
+figure;
 semilogx(contrasts, R, '-o'); hold on;
 
 %%

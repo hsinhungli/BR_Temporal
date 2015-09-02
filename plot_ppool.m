@@ -1,39 +1,40 @@
-fileName = './Data/cond_1_08171247';
-load(fileName);
+%fileName = './Data/cond_1_08171247';
+%load(fileName);
 nsim = length(p_pool);
 condnames  =  {'B/A','B/iA','P/A','P/iA','SR/A','SR/iA','R/A','R/iA'};
 layernames =  {'L. Monocular', 'R. Monocular', 'Summation', 'L-R Opponency', 'R-L Opponency'};
 subplotlocs    = [4 6 2 1 3]; %on a 2x3 plot
-%% Dominance duration
-for i = 1:nsim
-    domDuration(i,:) = p_pool{i}.domDuration;
-    contrast(i,:)    = p_pool{i}.contrast;
-    fraction(i)      = domDuration(i,2) / sum(domDuration(i,:));
-end
-domDuration(isnan(domDuration)) = 0;
-cpsFigure(.5,.5)
-plot(fraction, domDuration(:,1), '-o',fraction, domDuration(:,2) ,'-o')
+
+%% Dominance duration: this is for the experiment that vary contrasts
+% for i = 1:nsim
+%     domDuration(i,:) = p_pool{i}.Idx_domD;
+%     contrast(i,:)    = p_pool{i}.contrast;
+%     fraction(i)      = domDuration(i,2) / sum(domDuration(i,:));
+% end
+% domDuration(isnan(domDuration)) = 0;
+% cpsFigure(.5,.5)
+% plot(fraction, domDuration(:,1), '-o',fraction, domDuration(:,2) ,'-o')
+% % ylim([0 10])
+% % xlim([0 1])
+% xlabel('Fraction B','FontSize',14)
+% ylabel('Mean duration (s)','FontSize',14)
+% legend({'A: fixed','B: varied'})
+% 
+% cpsFigure(.5,.5)
+% plot(contrast(:,2), domDuration(:,1), '-o',contrast(:,2), domDuration(:,2) ,'-o')
 % ylim([0 10])
-% xlim([0 1])
-xlabel('Fraction B','FontSize',14)
-ylabel('Mean duration (s)','FontSize',14)
-legend({'A: fixed','B: varied'})
-
-cpsFigure(.5,.5)
-plot(contrast(:,2), domDuration(:,1), '-o',contrast(:,2), domDuration(:,2) ,'-o')
-ylim([0 10])
-%xlim([0 1])
-xlabel('Contrast B','FontSize',14)
-ylabel('Mean duration (s)','FontSize',14)
-legend({'A: fixed','B: varied'})
-
-cpsFigure(.5,.5)
-plot(contrast(:,2), fraction,'-o')
-ylim([0 1])
-%xlim([0 1])
-xlabel('Contrast B','FontSize',14)
-ylabel('Fraction B','FontSize',14)
-legend({'B: varied'})
+% %xlim([0 1])
+% xlabel('Contrast B','FontSize',14)
+% ylabel('Mean duration (s)','FontSize',14)
+% legend({'A: fixed','B: varied'})
+% 
+% cpsFigure(.5,.5)
+% plot(contrast(:,2), fraction,'-o')
+% ylim([0 1])
+% %xlim([0 1])
+% xlabel('Contrast B','FontSize',14)
+% ylabel('Fraction B','FontSize',14)
+% legend({'B: varied'})
 %% Dominance duration
 cpsFigure(.6*nsim,.6);
 for i = 1:nsim
@@ -42,7 +43,7 @@ for i = 1:nsim
 end
 tightfig;
 
-%% Rivalry Idx
+%% Rivalry Idx curves
 cpsFigure(.6*nsim,.6);
 xa = (1:p_pool{1}.epochlength-1)-p_pool{1}.epochlength/2;
 xa = xa/1000;
@@ -52,14 +53,56 @@ for i = 1:nsim
     plot(xa,p_pool{i}.rSignal,'k','LineWidth',1.2);
     xlim([min(xa) max(xa)])
 end
-tightfig;
 
 %%
-pIdx  = 1;
+cpsFigure(.6*nsim,.6);
+Idx_rivalry = nan(1,nsim);
+for i = 1:nsim
+    Idx_rivalry(i) = p_pool{i}.Idx_rivalry;
+end
+subplot(1,5,1)
+bar(Idx_rivalry);
+title('Rivalry Index')
+
+Idx_wta = nan(1,nsim);
+for i = 1:nsim
+    Idx_wta(i) = p_pool{i}.Idx_wta;
+end
+subplot(1,5,2)
+bar(Idx_wta);
+title('WTA Index')
+
+Idx_diff = nan(1,nsim);
+for i = 1:nsim
+    Idx_diff(i) = p_pool{i}.Idx_diff;
+end
+subplot(1,5,3)
+bar(Idx_diff);
+title('diff Index')
+
+Idx_ratio = nan(1,nsim);
+for i = 1:nsim
+    Idx_ratio(i) = p_pool{i}.Idx_ratio;
+end
+subplot(1,5,4)
+bar(Idx_ratio);
+title('ratio Index')
+
+Idx_mean = nan(1,nsim);
+for i = 1:nsim
+    Idx_mean(i) = p_pool{i}.Idx_mean;
+end
+subplot(1,5,5)
+bar(Idx_mean);
+title('mean Index')
+%tightfig;
+
+%%
+pIdx  = 2;
 tplot = 1:10000;
 
 cpsFigure(2,.8);
-set(gcf,'Name',sprintf('%s contrast: %1.2f %1.2f', condnames{p_pool{1}.cond}, p_pool{pIdx}.contrast(1), p_pool{pIdx}.contrast(2)));
+set(gcf,'Name',sprintf('%s contrast: %1.2f %1.2f', condnames{p_pool{pIdx}.cond}, p_pool{pIdx}.contrast(1), p_pool{pIdx}.contrast(2)));
 for lay = 1:p_pool{1}.nLayers
     subplot(2,3,subplotlocs(lay))
     cla; hold on;

@@ -6,7 +6,7 @@ for lay=1:p.nLayers %go through maximum possible layers. This way, if there are 
     p.r{lay}   = zeros(p.ntheta,p.nt); %Firing Rate
     p.f{lay}   = zeros(p.ntheta,p.nt); %Estimated Asy firing rate
     p.a{lay}   = zeros(p.ntheta,p.nt); %Adaptation term
-    p.dr{lay}  = zeros(p.ntheta,p.nt); %Differentiation of firing rate (r)
+    %p.dr{lay}  = zeros(p.ntheta,p.nt); %Differentiation of firing rate (r)
     if ismember(lay,[1 2])
         p.inh{lay} = zeros(p.ntheta,p.nt);
     end
@@ -14,6 +14,5 @@ for lay=1:p.nLayers %go through maximum possible layers. This way, if there are 
 end
 
 p.att          = ones(p.ntheta,p.nt);  %Attentional gain factor
-p.attTrace     = zeros(p.ntheta,p.nt); %Record of Attentional gain factor
 p.WTA          = zeros(p.ntheta,p.nt);
 

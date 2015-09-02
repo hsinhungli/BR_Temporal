@@ -1,13 +1,13 @@
-clear all;
-close all;
-
+%clear all;
+close all; drawnow;
+p = setParameters;
 quickcheck = 1;
 if quickcheck == 1
     numContrasts = 9;
 else
     numContrasts = 25;
 end
-cRange = [.01 1];
+cRange = [.01 2];
 
 % Pick contrasts
 logCRange = log10(cRange);
@@ -17,19 +17,21 @@ contrasts_mask = ones(1,numContrasts)*cRange(2);
 
 baselineUnmod = 0;
 alpha = 1;
-n     = 2;
-nLay  = 2;
-sigma_mon = .1;
-sigma_bin = .1;
-sigma_opp = .1;
-w_int = 1;
-attG = 1;
+n     = p.p(1);
+nLay  = 5;
+sigma_mon = p.sigma(1);
+sigma_bin = p.sigma(3);
+sigma_opp = p.sigma(5);
+w_int     = p.w_int;
+attG      = 1;
 
-iA_amp_opts = {[0 0]; [0 1]; [1 1]}; %dichoptic grating, monocular plaid, binocular plaids
-iB_amp_opts = {[1 0]; [1 0]; [1 1]}; %dichoptic grating, monocular plaid, binocular plaids
+clear p;
+iA_amp_opts = {[0 0]; [0 0]; [1 1]}; 
+iB_amp_opts = {[1 0]; [1 1]; [1 1]}; 
+%A and B are two orientation channels
 
 %% Run Monocular Layers First and then Run Summation Layers
-for cond = [1 2]
+for cond = 1:2
     
     %% Define Input(stimuli) for monocular layers
     for lay = 1:2
@@ -52,7 +54,7 @@ for cond = [1 2]
     end
     
     %Get Suppresion and Normalization for each monocular layer
-    for lay = 1:nLay
+    for lay = 1:2
         switch lay
             case 1
                 sigma = halfExp(ones(1, numContrasts)*sigma_mon,n);

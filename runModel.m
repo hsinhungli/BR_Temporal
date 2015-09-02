@@ -1,18 +1,18 @@
 close all; drawnow;
 condnames  =  {'B/A','B/iA','P/A','P/iA','SR/A','SR/iA','R/A','R/iA'};
 layernames =  {'L. Monocular', 'R. Monocular', 'Summation', 'L-R Opponency', 'R-L Opponency'};
-p        = setParameters;
-saveData = 0;
+p          = setParameters;
+saveData   = 0;
 %% Set conditions/contrasts to simulate
 % Pick contrasts to run
 contrasts =...
-    [.2;...
-     .2];
+    [1;...
+     1];
 
 % Pick conditions to run
-rcond     = 3;   %conditions to run
+rcond     = [1 2 3];   %conditions to run
 ncond     = numel(rcond);
-rcontrast = 3; %contrast levels to run
+rcontrast = 1; %contrast levels to run
 ncontrast = numel(rcontrast);
 plotFig   = 1;
 if plotFig == 1
@@ -56,7 +56,7 @@ for cond = rcond
         
         %run the model
         ShowIdx = 1;
-        p       = n_model(p, cond);
+        p       = n_model(p);
         
         %% compute WTA index
         p = getIndex(p);
@@ -95,7 +95,7 @@ for cond = rcond
             
             %To view the two rivarly time series
             subplot(4,1,1);hold on
-            title('LE & RE')
+            title('Summation Layer')
             imagesc(p.tlist/1000,.5,p.phaseIdx)
             colormap([.8 .65 .65;.65 .65 .8;])
             xlim([1 max(p.tlist/1000)])
@@ -139,85 +139,3 @@ end
 if saveData==1
     save(dataName,'p_pool');
 end
-
-% %%
-% temp = p_pool{1};
-% cpsFigure(.5,.5);
-% xa = 1:size(temp.rSignal,2);
-% xa = ((xa/max(xa))*temp.epochlength-temp.epochlength/2)/1000;
-% plot(xa,temp.aSignal,'LineWidth',1.2);hold on;
-% plot(xa,temp.rSignal,'k','LineWidth',1.2);
-% 
-% cpsFigure(ncond*.5,.7);
-% epochlength = 6000; %in msec
-% filter_std  = 300; %in msec
-% aSignal = [];
-% rSignal = [];
-% 
-% for i = 1:ncond
-%     cond = rcond(i);
-%     for c = 1:ncontrast
-%         subplot(ncontrast,ncond,(i-1)*ncontrast+c);
-%         
-%         plot(x,aSignal(i,:),'LineWidth',1.2);hold on;
-%         plot(x,rSignal(i,:),'k','LineWidth',1.2);
-%         
-%         xlim([min(x) max(x)])
-%         ylim([0 1.5])
-%         title(condnames(condIdx),'FontSize', 12)
-%     end
-% end
-% 
-% % cpsFigure(1,1);
-% % for i = 1:ncond
-% %     bar(i,domDuration(rcond(i)), 'FaceColor', [.6 .6 .6]); hold on
-% % end
-% % %ylim([0 max(domDuration)+2])
-% % ylabel('domDuration','FontSize', 12)
-% % set(gca,'XTick',1:ncond,'FontSize', 12)
-% % set(gca,'XTickLabel', (condnames(rcond)));
-% 
-% %% Plot Index
-% cpsFigure(1.4,.6)
-% subplot1(1,3,'Gap',[0.05 0.02]);hold on;
-% 
-% subplot1(1)
-% for i = 1:ncond
-%     bar(i,rivalryIdx(i), 'FaceColor', [.6 .6 .6]);
-% end
-% title('Rivalry index','FontSize',14)
-% ylim([0 1]); xlim([0.5 ncond+.5])
-% set(gca,'XTick', 1:ncond,'FontSize', 10)
-% set(gca,'XTickLabel', (condnames(rcond)));
-% set(gca,'FontSize',14);
-% 
-% % subplot1(2)
-% % for i = 1:ncond
-% %     bar(i,p_pool{rcond(i)}.diff, 'FaceColor', [.6 .6 .6]);
-% % end
-% % title('diff index','FontSize',14)
-% % ylim([0 1]); xlim([0.5 ncond+.5])
-% % set(gca,'XTick', 1:ncond,'FontSize', 10)
-% % set(gca,'XTickLabel', (condnames(rcond)));
-% % set(gca,'FontSize',14);
-% 
-% subplot1(2)
-% for i = 1:ncond
-%     bar(i,p_pool{rcond(i)}.corrIdx, 'FaceColor', [.6 .6 .6]); hold on
-% end
-% title('Correlation','FontSize',14)
-% ylim([-1 1]); xlim([0.5 ncond+.5])
-% set(gca,'YTick', -1:.5:1,'FontSize', 10)
-% set(gca,'YTickLabel', -1:.5:5);
-% set(gca,'XTick', 1:ncond,'FontSize', 10)
-% set(gca,'XTickLabel', (condnames(rcond)));
-% set(gca,'FontSize',14);
-% 
-% subplot1(3)
-% for i = 1:ncond
-%     bar(i,p_pool{rcond(i)}.meanAmp, 'FaceColor', [.6 .6 .6]); hold on
-% end
-% title('Mean Amplitude','FontSize',14)
-% set(gca,'FontSize',14); xlim([0.5 ncond+.5])
-% set(gca,'XTick', 1:ncond,'FontSize', 14)
-% set(gca,'XTickLabel', (condnames(rcond)));
